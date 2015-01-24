@@ -40,17 +40,17 @@ In the search field type "PayPal IPN" and click Search Plugins. Once you've foun
 
 == Frequently Asked Questions ==
 
-What is PayPal Instant Payment Notification (IPN)?
+= What is PayPal Instant Payment Notification (IPN)? =
 
 Instant Payment Notification (IPN) is a message service that notifies you of events related to PayPal transactions. You can use IPN messages to automate back-office and administrative functions, such as fulfilling orders, tracking customers, and providing status and other transaction-related information.
 
-How do I enable IPN in my PayPal account?
+= How do I enable IPN in my PayPal account? =
 
 Take a look at [PayPal's IPN Setup Guide](https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNSetup/) for details on enabling IPN within your PayPal account.
 
 You can find your IPN URL under Settings -> PayPal IPN in your WordPress admin panel.
 
-Where can I find more detailed documentation?
+= Where can I find more detailed documentation? =
 
 We have [documentation available on our website](http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/).
 
