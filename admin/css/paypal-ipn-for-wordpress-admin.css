@@ -1,0 +1,8 @@
+#the-list tr.warning, #the-list tr.warning td a, #the-list tr.warning td {
+    background-color: #f33;
+    color: #ff9;
+}
+
+#paypal_ipn_primary_url {
+    width: 81%;
+}

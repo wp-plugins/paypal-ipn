@@ -1,0 +1,208 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Paypal IPN for Wordpress\n"
+"POT-Creation-Date: 2015-01-13 18:46+0530\n"
+"PO-Revision-Date: 2015-01-13 18:46+0530\n"
+"Last-Translator: \n"
+"Language-Team: MD <chiragp@multidots.in>\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_x;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: E:\\paypal-ipn-for-wordpress\n"
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:49
+msgid "PayPal IPN Primary URL:"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:52
+msgid "Take a look at the "
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:52
+msgid " for details on setting up IPN with this URL."
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/includes/class-paypal-ipn-for-wordpress.php:93
+msgid "Configure"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/includes/class-paypal-ipn-for-wordpress.php:94
+msgid "Docs"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/includes/class-paypal-ipn-for-wordpress.php:95
+msgid "Support"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/includes/class-paypal-ipn-for-wordpress.php:96
+msgid "Write a Review"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:55
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:60
+msgid "Debug Log"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:62
+msgid "Enable logging"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:63
+msgid "Log PayPal events, such as IPN requests, inside"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-general-setting.php:66
+#, php-format
+msgid ""
+"Log directory (<code>%s</code>) is not writable. To allow logging, make this "
+"writable or define a custom <code>PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR</code>."
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-html-output.php:319
+msgid "Select a page&hellip;"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:54
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:56
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:57
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:58
+msgid "PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:59
+msgid "Search PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:60
+msgid "All PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:61
+msgid "Parent PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:62
+msgid "Parent PayPal IPN Types:"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:63
+msgid "Edit PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:64
+msgid "Update PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:65
+msgid "Add New PayPal IPN Types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:66
+msgid "New PayPal IPN Types Name"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:91
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:92
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:93
+msgid "PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:94
+msgid "Add PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:95
+msgid "Add New PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:96
+msgid "Edit"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:97
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:99
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:100
+msgid "View PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:98
+msgid "New PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:101
+msgid "Search PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:102
+msgid "No PayPal IPN found"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:103
+msgid "No PayPal IPN found in trash"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:104
+msgid "Parent PayPal IPN"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:106
+msgid "This is where you can add new IPN to your store."
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:163
+msgid "Show all Transaction types"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:193
+msgid "Show all payment status"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:242
+msgid "Transaction ID"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:243
+msgid "Invoice ID"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:244
+msgid "Date"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:245
+msgid "Name / Company"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:246
+msgid "Amount"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:247
+msgid "Transaction Type"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:248
+msgid "Payment status"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:362
+msgid "PayPal IPN Fields"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:375
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:381
+msgid "IPN Field Name"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:376
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:382
+msgid "IPN Field Value"
+msgstr ""
+
+#: E:\paypal-ipn-for-wordpress/admin/partials/class-paypal-ipn-for-wordpress-post-types.php:427
+msgid "PayPal IPN Raw Data"
+msgstr ""
