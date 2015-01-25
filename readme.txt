@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: paypal, ipn, instant payment notification, automation
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -55,6 +55,9 @@ You can find your IPN URL under Settings -> PayPal IPN in your WordPress admin p
 We have [documentation available on our website](http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/).
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix - Adjusts post type icon so it will work regardless of plugin folder name.
 
 = 1.0.0 =
 

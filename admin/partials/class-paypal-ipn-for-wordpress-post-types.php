@@ -116,7 +116,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
             'hierarchical' => false, // Hierarchical causes memory issues - WP loads all records!
             'rewrite' => array('slug' => 'paypal_ipn'),
             'query_var' => true,
-            'menu_icon' => plugins_url('paypal-ipn-for-wordpress/admin/images/paypal-ipn-for-wordpress-icon.png'),
+            'menu_icon' => PIW_PLUGIN_URL . '/admin/images/paypal-ipn-for-wordpress-icon.png',
             'supports' => array('', ''),
             'has_archive' => true,
             'show_in_nav_menus' => true
