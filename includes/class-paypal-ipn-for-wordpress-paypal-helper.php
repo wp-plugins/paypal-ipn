@@ -101,7 +101,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
             'httpversion' => '1.0.0',
             'compress' => false,
             'decompress' => false,
-            'user-agent' => 'paypal-ipn-for-wordpress/'
+            'user-agent' => 'paypal-ipn/'
         );
 
         if ('yes' == $this->debug) {

@@ -19,9 +19,16 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Ipn_Forwarder {
 
         add_action('paypal_ipn_for_wordpress_ipn_forwarding_handler', array(__CLASS__, 'paypal_ipn_for_wordpress_ipn_forwarding_handler'), 10, 1);
 
-        add_filter('woocommerce_paypal_args', array(__CLASS__, 'paypal_ipn_for_wordpress_standard_parameters'), 10, 1);
+        // // Check PayPal Standard is enabled
+        $woocommerce_paypal_settings = get_option('woocommerce_paypal_settings');
+        
+        if(isset($woocommerce_paypal_settings['enabled']) && $woocommerce_paypal_settings['enabled'] == 'yes') {
+            
+            add_filter('woocommerce_paypal_args', array(__CLASS__, 'paypal_ipn_for_wordpress_standard_parameters'), 10, 1);
 
-        add_filter('paypal_ipn_for_wordpress_ipn_forwarding_setting', array(__CLASS__, 'paypal_ipn_for_wordpress_ipn_forwarding_setting'), 10, 1);
+            add_filter('paypal_ipn_for_wordpress_ipn_forwarding_setting', array(__CLASS__, 'paypal_ipn_for_wordpress_ipn_forwarding_setting'), 10, 1);
+            
+        }
     }
 
     /**
@@ -48,7 +55,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Ipn_Forwarder {
                         'httpversion' => '1.1',
                         'compress' => false,
                         'decompress' => false,
-                        'user-agent' => 'paypal-ipn-for-wordpress/'
+                        'user-agent' => 'paypal-ipn/'
                     );
 
                     $response = wp_remote_post($serialize_value['paypal_ipn_url'], $params);
