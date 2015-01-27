@@ -5,12 +5,12 @@
  * Plugin Name:       PayPal IPN for WordPress
  * Plugin URI:        http://www.angelleye.com/
  * Description:       A PayPal Instant Payment Notification toolkit that helps you automate tasks in real-time when transactions hit your PayPal account.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Angell EYE
  * Author URI:        http://www.angelleye.com/
  * License:           GNU General Public License v3.0
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.html
- * Text Domain:       paypal-ipn-for-wordpress
+ * Text Domain:       paypal-ipn
  * Domain Path:       /languages
  */
 
@@ -34,7 +34,7 @@ if (!defined('PIW_PLUGIN_URL'))
   *  define log file path
   */
  if (!defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) {
-	define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', ABSPATH . 'paypal-ipn-for-wordpress-logs/');
+	define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', ABSPATH . 'paypal-ipn-logs/');
  }
  
  /**

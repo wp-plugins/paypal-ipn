@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: paypal, ipn, instant payment notification, automation
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -44,17 +44,40 @@ In the search field type "PayPal IPN" and click Search Plugins. Once you've foun
 
 Instant Payment Notification (IPN) is a message service that notifies you of events related to PayPal transactions. You can use IPN messages to automate back-office and administrative functions, such as fulfilling orders, tracking customers, and providing status and other transaction-related information.
 
+Some things you could potentially do with IPN are...
+
+* Automatically generate custom, branded email notifications for buyers and/or sellers.
+* Automatically update databases when transactions occur for customer, order, and inventory tracking.
+* Automatically post new messages on a Facebook or Twitter account when an item sells.
+* Automatically deliver e-goods for digital products like music, videos, and documents.
+
+You can automate all sorts of things with IPN, so the list really goes on and on.  Also, it all happens in instantly as transactions hit your PayPal account.  It's really a very powerful tool that too few people utilize.
+
 = How do I enable IPN in my PayPal account? =
 
-Take a look at [PayPal's IPN Setup Guide](https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNSetup/) for details on enabling IPN within your PayPal account.
-
-You can find your IPN URL under Settings -> PayPal IPN in your WordPress admin panel.
+* Take a look at [PayPal's IPN Setup Guide](https://developer.paypal.com/docs/classic/ipn/integration-guide/IPNSetup/) for details on enabling IPN within your PayPal account.
+* You can find your IPN URL under Settings -> PayPal IPN in your WordPress admin panel.
 
 = Where can I find more detailed documentation? =
 
-We have [documentation available on our website](http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/).
+* We have [documentation available on our website](http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/).
+
+= Why am I not seeing transactions in my PayPal IPN dashboard in WordPress? =
+
+* Make sure you have added the IPN URL for the plugin (Available in WordPress under Settings -> PayPal IPN) to your PayPal profile under the [IPN settings area](https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNSetup/).
+* If you are using PayPal Standard Payments buttons, make sure you don't have the "notify" parameter set to some other URL.
+* If you are using PayPal API's, make sure you don't have the NOTIFYURL parameter set to some other URL.
+* If you still have problems you may [start a thread in the plugin support forum](https://wordpress.org/support/plugin/paypal-ipn).
+
+= How can I test that my IPN solution is working as expected? =
+
+* Take a look at [this article I wrote covering the topic of general IPN testing and troubleshooting](https://www.angelleye.com/test-paypal-ipn/).  I think it will help!
 
 == Changelog ==
+
+= 1.0.2 - 01.27.2015 =
+* Fix - Adjusts areas of the plugin where the slug needed to be updated to match repo name.
+* Fix - Adjusts WooCommerce compatibility so that IPN forwarding will not occur unless PayPal Standard is enabled.
 
 = 1.0.1 =
 * Fix - Adjusts post type icon so it will work regardless of plugin folder name.

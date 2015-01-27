@@ -56,7 +56,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     public function __construct() {
 
         $this->plugin_name = 'PayPal IPN for WordPress';
-        $this->version = '1.0.1';
+        $this->version = '1.0.2';
 
         $this->load_dependencies();
         $this->set_locale();
@@ -89,10 +89,10 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     public function plugin_action_links($actions, $plugin_file, $plugin_data, $context)
     {
         $custom_actions = array(
-            'configure' => sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=paypal-ipn-for-wordpress-option' ), __( 'Configure', 'paypal-ipn-for-wordpress' ) ),
-            'docs'      => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link&utm_campaign=paypal_ipn_for_wordpress', __( 'Docs', 'paypal-ipn-for-wordpress' ) ),
-            'support'   => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/plugin/paypal-ipn-for-wordpress/', __( 'Support', 'paypal-ipn-for-wordpress' ) ),
-            'review'    => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/view/plugin-reviews/paypal-ipn-for-wordpress', __( 'Write a Review', 'paypal-ipn-for-wordpress' ) ),
+            'configure' => sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=paypal-ipn-for-wordpress-option' ), __( 'Configure', 'paypal-ipn' ) ),
+            'docs'      => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link&utm_campaign=paypal_ipn_for_wordpress', __( 'Docs', 'paypal-ipn' ) ),
+            'support'   => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/plugin/paypal-ipn/', __( 'Support', 'paypal-ipn' ) ),
+            'review'    => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/view/plugin-reviews/paypal-ipn', __( 'Write a Review', 'paypal-ipn' ) ),
         );
 
         // add the links to the front of the actions list

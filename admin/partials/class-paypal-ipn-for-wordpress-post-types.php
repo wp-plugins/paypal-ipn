@@ -51,19 +51,19 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
         register_taxonomy('paypal_ipn_type', apply_filters('paypal-ipn-for-wordpress_taxonomy_objects_ipn_cat', array('paypal_ipn')), apply_filters('paypal-ipn-for-wordpress_taxonomy_args_ipn_cat', array(
             'hierarchical' => true,
-            'label' => __('PayPal IPN Types', 'paypal-ipn-for-wordpress'),
+            'label' => __('PayPal IPN Types', 'paypal-ipn'),
             'labels' => array(
-                'name' => __('PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'singular_name' => __('PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'menu_name' => _x('PayPal IPN Types', 'Admin menu name', 'paypal-ipn-for-wordpress'),
-                'search_items' => __('Search PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'all_items' => __('All PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'parent_item' => __('Parent PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'parent_item_colon' => __('Parent PayPal IPN Types:', 'paypal-ipn-for-wordpress'),
-                'edit_item' => __('Edit PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'update_item' => __('Update PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'add_new_item' => __('Add New PayPal IPN Types', 'paypal-ipn-for-wordpress'),
-                'new_item_name' => __('New PayPal IPN Types Name', 'paypal-ipn-for-wordpress')
+                'name' => __('PayPal IPN Types', 'paypal-ipn'),
+                'singular_name' => __('PayPal IPN Types', 'paypal-ipn'),
+                'menu_name' => _x('PayPal IPN Types', 'Admin menu name', 'paypal-ipn'),
+                'search_items' => __('Search PayPal IPN Types', 'paypal-ipn'),
+                'all_items' => __('All PayPal IPN Types', 'paypal-ipn'),
+                'parent_item' => __('Parent PayPal IPN Types', 'paypal-ipn'),
+                'parent_item_colon' => __('Parent PayPal IPN Types:', 'paypal-ipn'),
+                'edit_item' => __('Edit PayPal IPN Types', 'paypal-ipn'),
+                'update_item' => __('Update PayPal IPN Types', 'paypal-ipn'),
+                'add_new_item' => __('Add New PayPal IPN Types', 'paypal-ipn'),
+                'new_item_name' => __('New PayPal IPN Types Name', 'paypal-ipn')
             ),
             'show_ui' => false,
             'query_var' => true,
@@ -116,7 +116,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
             'hierarchical' => false, // Hierarchical causes memory issues - WP loads all records!
             'rewrite' => array('slug' => 'paypal_ipn'),
             'query_var' => true,
-            'menu_icon' => PIW_PLUGIN_URL . '/admin/images/paypal-ipn-for-wordpress-icon.png',
+            'menu_icon' => PIW_PLUGIN_URL . 'admin/images/paypal-ipn-for-wordpress-icon.png',
             'supports' => array('', ''),
             'has_archive' => true,
             'show_in_nav_menus' => true
@@ -138,12 +138,12 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         foreach ($ipn_post_status_list as $ipn_post_status) {
             $ipn_post_status_display_name = ucfirst(str_replace('_', ' ', $ipn_post_status));
             register_post_status($ipn_post_status, array(
-                'label' => _x($ipn_post_status_display_name, 'IPN status', 'paypal-ipn-for-wordpress'),
+                'label' => _x($ipn_post_status_display_name, 'IPN status', 'paypal-ipn'),
                 'public' => ($ipn_post_status == 'trash') ? false : true,
                 'exclude_from_search' => false,
                 'show_in_admin_all_list' => ($ipn_post_status == 'trash') ? false : true,
                 'show_in_admin_status_list' => true,
-                'label_count' => _n_noop($ipn_post_status_display_name . ' <span class="count">(%s)</span>', $ipn_post_status_display_name . ' <span class="count">(%s)</span>', 'paypal-ipn-for-wordpress')
+                'label_count' => _n_noop($ipn_post_status_display_name . ' <span class="count">(%s)</span>', $ipn_post_status_display_name . ' <span class="count">(%s)</span>', 'paypal-ipn')
             ));
         }
     }
@@ -376,7 +376,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
      */
     public static function paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_custome_fields() {
 
-        add_meta_box('paypal-ipn-for-wordpress-ipn-data-custome-field', __('PayPal IPN Fields', 'paypal-ipn-for-wordpress'), array(__CLASS__, 'paypal_ipn_for_wordpress_display_ipn_custome_fields'), 'paypal_ipn', 'normal', 'high');
+        add_meta_box('paypal-ipn-ipn-data-custome-field', __('PayPal IPN Fields', 'paypal-ipn'), array(__CLASS__, 'paypal_ipn_for_wordpress_display_ipn_custome_fields'), 'paypal_ipn', 'normal', 'high');
     }
 
     /**
@@ -389,14 +389,14 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
             echo "<div class='wrap'>";
             echo "<table class='widefat'><thead>
                         <tr>
-                            <th>" . __('IPN Field Name', 'paypal-ipn-for-wordpress') . "</th>
-                            <th>" . __('IPN Field Value', 'paypal-ipn-for-wordpress') . "</th>
+                            <th>" . __('IPN Field Name', 'paypal-ipn') . "</th>
+                            <th>" . __('IPN Field Value', 'paypal-ipn') . "</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>" . __('IPN Field Name', 'paypal-ipn-for-wordpress') . "</th>
-                            <th>" . __('IPN Field Value', 'paypal-ipn-for-wordpress') . "</th>
+                            <th>" . __('IPN Field Name', 'paypal-ipn') . "</th>
+                            <th>" . __('IPN Field Value', 'paypal-ipn') . "</th>
 
                         </tr>
                     </tfoot>";
@@ -441,7 +441,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
      */
     public static function paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_serialized() {
 
-        add_meta_box('paypal-ipn-for-wordpress-ipn-data-serialized', __('PayPal IPN Raw Data', 'paypal-ipn-for-wordpress'), array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_box'), 'paypal_ipn', 'advanced', 'high');
+        add_meta_box('paypal-ipn-for-wordpress-ipn-data-serialized', __('PayPal IPN Raw Data', 'paypal-ipn'), array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_box'), 'paypal_ipn', 'advanced', 'high');
     }
 
     /**
