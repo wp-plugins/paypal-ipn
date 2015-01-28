@@ -305,13 +305,13 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
             }
 
             if (isset($posted['txn_id'])) {
-                $paypa_txn_id = $posted['txn_id'];
+                $paypal_txn_id = $posted['txn_id'];
             } elseif ($posted['subscr_id']) {
-                $paypa_txn_id = $posted['subscr_id'];
+                $paypal_txn_id = $posted['subscr_id'];
             } elseif ($posted['recurring_payment_id']) {
-                $paypa_txn_id = $posted['recurring_payment_id'];
+                $paypal_txn_id = $posted['recurring_payment_id'];
             } elseif ($posted['masspay_txn_id']) {
-                $paypa_txn_id = $posted['masspay_txn_id'];
+                $paypal_txn_id = $posted['masspay_txn_id'];
             }
 
             $new_posted = $this->paypal_ipn_for_wordpress_parse_ipn_data($posted);
@@ -329,7 +329,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
                 }
             }
 
-            if ($this->paypal_ipn_for_wordpress_exist_post_by_title($paypa_txn_id) == false) {
+            if ($this->paypal_ipn_for_wordpress_exist_post_by_title($paypal_txn_id) == false) {
 
                 if (isset($new_posted['txn_type_own'])) {
                     $post_status = $new_posted['txn_type_own'];
@@ -343,7 +343,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
                     'ID' => '',
                     'post_type' => 'paypal_ipn', // Custom Post Type Slug
                     'post_status' => $post_status,
-                    'post_title' => $paypa_txn_id,
+                    'post_title' => $paypal_txn_id,
                 );
 
                 $post_id = wp_insert_post($insert_ipn_array);
@@ -362,7 +362,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
                 $this->ipn_response_postmeta_handler($post_id, $posted);
             } else {
 
-                $post_id = $this->paypal_ipn_for_wordpress_exist_post_by_title($paypa_txn_id);
+                $post_id = $this->paypal_ipn_for_wordpress_exist_post_by_title($paypal_txn_id);
 
                 wp_update_post(array('ID' => $post_id, 'post_status' => $post_status));
 

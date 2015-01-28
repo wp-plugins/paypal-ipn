@@ -56,7 +56,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     public function __construct() {
 
         $this->plugin_name = 'PayPal IPN for WordPress';
-        $this->version = '1.0.2';
+        $this->version = '1.0.3';
 
         $this->load_dependencies();
         $this->set_locale();
@@ -296,7 +296,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
      */
     private function define_constants() {
         if (!defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) {
-            define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', ABSPATH . 'paypal-ipn-for-wordpress-logs/');
+            define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', ABSPATH . 'paypal-ipn-logs/');
         }
     }
 

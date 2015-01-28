@@ -8,7 +8,7 @@
  * @since      1.0.0
  * @package    paypal-ipn-for-wordpress
  * @subpackage paypal-ipn-for-wordpress/includes
- * @author     Jignesh Kaila <jignesh@multidots.in>
+ * @author     Angell EYE <service@angelleye.com>
  */
 class AngellEYE_Paypal_Ipn_For_Wordpress_Ipn_Forwarder {
 

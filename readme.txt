@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: paypal, ipn, instant payment notification, automation
 Requires at least: 3.8
 Tested up to: 4.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -74,6 +74,10 @@ You can automate all sorts of things with IPN, so the list really goes on and on
 * Take a look at [this article I wrote covering the topic of general IPN testing and troubleshooting](https://www.angelleye.com/test-paypal-ipn/).  I think it will help!
 
 == Changelog ==
+
+= 1.0.3 - 01.28.2015 =
+* Fix - More adjustments to resolve issues with plugin repo name change.
+* Fix - Corrects random typos through-out the plugin.
 
 = 1.0.2 - 01.27.2015 =
 * Fix - Adjusts areas of the plugin where the slug needed to be updated to match repo name.
