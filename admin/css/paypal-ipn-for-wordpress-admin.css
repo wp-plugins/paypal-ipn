@@ -6,3 +6,7 @@
 #paypal_ipn_primary_url {
     width: 81%;
 }
+
+.widefat td {
+	word-break: break-all;
+}

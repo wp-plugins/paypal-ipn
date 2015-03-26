@@ -28,7 +28,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Admin_Display {
     }
 
     /**
-     * paypal_ipn_for_wordpress_options helper will trigger hook and handle all the settings section 
+     * paypal_ipn_for_wordpress_options helper will trigger hook and handle all the settings section
      * @since    1.0.0
      * @access   public
      */

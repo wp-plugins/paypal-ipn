@@ -58,16 +58,20 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_General_Setting {
                             <label for="paypal_ipn_for_wordpress_paypal_debug"><?php _e('Debug Log', 'Option'); ?>:</label>
                         </th>
                         <td class="forminp">
-                            <?php if (@fopen(PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR . 'test-log.log', 'a')) { ?>
-                                <fieldset>
-                                    <legend class="screen-reader-text"><span><?php echo __('Debug Log'); ?></span></legend>
-                                    <label for="paypal_ipn_for_wordpress_paypal_debug">
-                                        <input type="checkbox" <?php echo (get_option('paypal_ipn_for_wordpress_paypal_debug') == '1') ? 'checked="checked"' : '' ?> value="1" id="paypal_ipn_for_wordpress_paypal_debug" name="paypal_ipn_for_wordpress_paypal_debug" class=""><?php echo __('Enable logging'); ?></label><br>
-                                    <p class="description"><?php echo __('Log PayPal events, such as IPN requests, inside'); ?> <code><?php echo PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR; ?> </code></p>
-                                </fieldset>
-                            <?php } else { ?>
-                                <p><?php printf('<mark class="error">' . __('Log directory (<code>%s</code>) is not writable. To allow logging, make this writable or define a custom <code>PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR</code>.', 'Option') . '</mark>', PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR); ?></p>
-                            <?php } ?>
+                            <?php if (defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) { ?>
+                                <?php if (@fopen(PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR . 'test-log.log', 'a')) { ?>
+                                    <fieldset>
+                                        <legend class="screen-reader-text"><span><?php echo __('Debug Log'); ?></span></legend>
+                                        <label for="paypal_ipn_for_wordpress_paypal_debug">
+                                            <input type="checkbox" <?php echo (get_option('paypal_ipn_for_wordpress_paypal_debug') == '1') ? 'checked="checked"' : '' ?> value="1" id="paypal_ipn_for_wordpress_paypal_debug" name="paypal_ipn_for_wordpress_paypal_debug" class=""><?php echo __('Enable logging'); ?></label><br>
+                                        <p class="description"><?php echo __('Log PayPal events, such as IPN requests, inside'); ?> <code><?php echo PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR; ?> </code></p>
+                                    </fieldset>
+                                <?php } else { ?>
+                                    <p><?php printf('<mark class="error">' . __('Log directory (<code>%s</code>) is not writable. To allow logging, make this writable or define a custom <code>PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR</code>.', 'Option') . '</mark>', PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR); ?></p>
+                                <?php
+                                }
+                            }
+                            ?>
                         </td>
                     </tr>
                 </tbody>

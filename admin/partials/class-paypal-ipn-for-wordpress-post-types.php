@@ -135,16 +135,18 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
         $ipn_post_status_list = self::paypal_ipn_for_wordpress_get_ipn_status();
 
-        foreach ($ipn_post_status_list as $ipn_post_status) {
-            $ipn_post_status_display_name = ucfirst(str_replace('_', ' ', $ipn_post_status));
-            register_post_status($ipn_post_status, array(
-                'label' => _x($ipn_post_status_display_name, 'IPN status', 'paypal-ipn'),
-                'public' => ($ipn_post_status == 'trash') ? false : true,
-                'exclude_from_search' => false,
-                'show_in_admin_all_list' => ($ipn_post_status == 'trash') ? false : true,
-                'show_in_admin_status_list' => true,
-                'label_count' => _n_noop($ipn_post_status_display_name . ' <span class="count">(%s)</span>', $ipn_post_status_display_name . ' <span class="count">(%s)</span>', 'paypal-ipn')
-            ));
+        if (isset($ipn_post_status_list) && !empty($ipn_post_status_list)) {
+            foreach ($ipn_post_status_list as $ipn_post_status) {
+                $ipn_post_status_display_name = ucfirst(str_replace('_', ' ', $ipn_post_status));
+                register_post_status($ipn_post_status, array(
+                    'label' => _x($ipn_post_status_display_name, 'IPN status', 'paypal-ipn'),
+                    'public' => ($ipn_post_status == 'trash') ? false : true,
+                    'exclude_from_search' => false,
+                    'show_in_admin_all_list' => ($ipn_post_status == 'trash') ? false : true,
+                    'show_in_admin_status_list' => true,
+                    'label_count' => _n_noop($ipn_post_status_display_name . ' <span class="count">(%s)</span>', $ipn_post_status_display_name . ' <span class="count">(%s)</span>', 'paypal-ipn')
+                ));
+            }
         }
     }
 
@@ -226,8 +228,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
     public static function paypal_ipn_for_wordpress_get_ipn_status() {
         global $wpdb;
 
-        return $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT post_status FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s  ORDER BY post_status", 'paypal_ipn', 'auto-draft' ) );
-        
+        return $wpdb->get_col($wpdb->prepare("SELECT DISTINCT post_status FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s  ORDER BY post_status", 'paypal_ipn', 'auto-draft'));
     }
 
     /**
@@ -238,8 +239,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
     public static function paypal_ipn_for_wordpress_get_ipn_status_filter() {
         global $wpdb;
 
-        return $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT post_status FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s AND post_status != %s ORDER BY post_status", 'paypal_ipn', 'auto-draft', 'not-available' ) );
-        
+        return $wpdb->get_col($wpdb->prepare("SELECT DISTINCT post_status FROM {$wpdb->posts} WHERE post_type = %s AND post_status != %s AND post_status != %s ORDER BY post_status", 'paypal_ipn', 'auto-draft', 'not-available'));
     }
 
     /**
@@ -272,20 +272,52 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
         switch ($column) {
             case 'invoice' :
-                echo esc_attr(get_post_meta($post->ID, 'invoice', true));
+                $invoice = get_post_meta($post->ID, 'invoice', true);
+                if (isset($invoice) && !empty($invoice)) {
+                    echo esc_attr($invoice);
+                } else {
+                    $transaction_invoice_id = get_post_meta($post->ID, 'transaction_refund_id', true);
+                    if (isset($transaction_invoice_id) && !empty($transaction_invoice_id)) {
+                        echo esc_attr($transaction_invoice_id);
+                    }
+                }
                 break;
             case 'payment_date' :
-                echo esc_attr(get_post_meta($post->ID, 'payment_date', true));
+                $payment_date = esc_attr(get_post_meta($post->ID, 'payment_date', true));
+                if( isset($payment_date) && !empty($payment_date) ) {
+                	echo $payment_date;
+                } else {
+                	 $payment_date = esc_attr(get_post_meta($post->ID, 'payment_request_date', true));
+                	 if( isset($payment_date) && !empty($payment_date) ) {
+                	 	echo $payment_date;
+                	 }
+                }
                 break;
             case 'first_name' :
                 echo esc_attr(get_post_meta($post->ID, 'first_name', true) . ' ' . get_post_meta($post->ID, 'last_name', true));
                 echo (get_post_meta($post->ID, 'payer_business_name', true)) ? ' / ' . get_post_meta($post->ID, 'payer_business_name', true) : '';
                 break;
             case 'mc_gross' :
-                echo esc_attr(get_post_meta($post->ID, 'mc_gross', true));
+                $mc_gross = get_post_meta($post->ID, 'mc_gross', true);
+                if (isset($mc_gross) && !empty($mc_gross)) {
+                    echo esc_attr($mc_gross);
+                } else {
+                    $transaction_amount = get_post_meta($post->ID, 'transaction_amount', true);
+                    if (isset($transaction_amount) && !empty($transaction_amount)) {
+                        echo esc_attr($transaction_amount);
+                    }
+                }
                 break;
             case 'txn_type' :
-                echo esc_attr(get_post_meta($post->ID, 'txn_type', true));
+                $txn_type = get_post_meta($post->ID, 'txn_type', true);
+                if (isset($txn_type) && !empty($txn_type)) {
+                    echo esc_attr($txn_type);
+                } else {
+                    $transaction_type = get_post_meta($post->ID, 'transaction_type', true);
+                    if (isset($transaction_type) && !empty($transaction_type)) {
+                        echo esc_attr($transaction_type);
+                    }
+                }
                 break;
 
             case 'payment_status' :
@@ -340,6 +372,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         if (is_admin() && isset($_GET['post_type']) && $_GET['post_type'] == 'paypal_ipn' && isset($_GET['orderby']) && $_GET['orderby'] != 'None') {
             $query->query_vars['orderby'] = 'meta_value';
             $query->query_vars['meta_key'] = $_GET['orderby'];
+        } else {
+            return $query;
         }
     }
 
