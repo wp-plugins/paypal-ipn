@@ -178,16 +178,18 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Html_output {
                                     <?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
                                     >
                                         <?php
-                                        foreach ($value['options'] as $key => $val) {
-                                            ?>
-                                        <option value="<?php echo esc_attr($key); ?>" <?php
-                                        if (is_array($option_value)) {
-                                            selected(in_array($key, $option_value), true);
-                                        } else {
-                                            selected($option_value, $key);
-                                        }
-                                        ?>><?php echo $val ?></option>
-                                                <?php
+                                        if (isset($value['options']) && !empty($value['options'])) {
+                                            foreach ($value['options'] as $key => $val) {
+                                                ?>
+                                            <option value="<?php echo esc_attr($key); ?>" <?php
+                                            if (is_array($option_value)) {
+                                                selected(in_array($key, $option_value), true);
+                                            } else {
+                                                selected($option_value, $key);
+                                            }
+                                            ?>><?php echo $val ?></option>
+                                                    <?php
+                                                }
                                             }
                                             ?>
                                 </select> <?php echo $description; ?>

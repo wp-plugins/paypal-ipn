@@ -3,8 +3,8 @@ Contributors: angelleye
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SG9SQU2GBXJNA
 Tags: paypal, ipn, instant payment notification, automation
 Requires at least: 3.8
-Tested up to: 4.1
-Stable tag: 1.0.3
+Tested up to: 4.1.1
+Stable tag: 1.0.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -74,6 +74,13 @@ You can automate all sorts of things with IPN, so the list really goes on and on
 * Take a look at [this article I wrote covering the topic of general IPN testing and troubleshooting](https://www.angelleye.com/test-paypal-ipn/).  I think it will help!
 
 == Changelog ==
+
+= 1.0.4 - 03.26.2015 =
+* Fix - Resolves issue where direct hits to the IPN URL were creating empty records in the system.
+* Fix - Resolves PHP notices when updating plugin.
+* Fix - Resolves issue where search functionality was not working correctly.
+* Tweak - Search now works across all columns.
+* Feature - Adaptive Payments compatibility.
 
 = 1.0.3 - 01.28.2015 =
 * Fix - More adjustments to resolve issues with plugin repo name change.

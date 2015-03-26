@@ -56,7 +56,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     public function __construct() {
 
         $this->plugin_name = 'PayPal IPN for WordPress';
-        $this->version = '1.0.3';
+        $this->version = '1.0.4';
 
         $this->load_dependencies();
         $this->set_locale();
@@ -185,7 +185,9 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
 
         $plugin_admin = new AngellEYE_Paypal_Ipn_For_Wordpress_Admin($this->get_plugin_name(), $this->get_version());
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        
+        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+        $this->loader->add_action( 'posts_where_request', $plugin_admin, 'paypal_ipn_for_wordpress_modify_wp_search' );
+
     }
 
     /**

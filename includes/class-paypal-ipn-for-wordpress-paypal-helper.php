@@ -41,19 +41,31 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
 
         $ipn_response = !empty($_POST) ? $_POST : false;
 
-        if ($ipn_response && $this->check_ipn_request_is_valid($ipn_response)) {
+        $return = $this->paypal_ipn_for_wordpress_check_adaptive_paments_is_vlidate($ipn_response);
 
-            header('HTTP/1.1 200 OK');
+        if (isset($return['validate']) && ($return['validate'] == 'required_to_check')) {
 
-            do_action("paypal_ipn_for_wordpress_valid_ipn_request", $ipn_response);
+            // If $_POST is empty return without process
+            if ($ipn_response == false) {
+                return false;
+            }
 
-            return true;
-        } else {
+            if ($ipn_response && $this->check_ipn_request_is_valid($ipn_response)) {
 
-            do_action("paypal_ipn_for_wordpress_ipn_request_failed", "PayPal IPN Request Failure", array('response' => 200));
+                header('HTTP/1.1 200 OK');
 
-            return false;
+                do_action("paypal_ipn_for_wordpress_valid_ipn_request", $ipn_response);
+
+                return true;
+            } else {
+
+                do_action("paypal_ipn_for_wordpress_ipn_request_failed", "PayPal IPN Request Failure", array('response' => 200));
+
+                return false;
+            }
         }
+
+        return $return;
     }
 
     /**
@@ -141,14 +153,34 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
      * return boolean
      */
     public function successful_request($IPN_status) {
+
         $ipn_response = !empty($_POST) ? $_POST : false;
+
+        $this->log->add('paypal', 'Payment IPN Array: ' . print_r($ipn_response, true));
+        // If $_POST is empty return without process
+        if ($ipn_response == false) {
+            return false;
+        }
+
         $ipn_response['IPN_status'] = ( $IPN_status == true ) ? 'Verified' : 'Invalid';
 
         if ('yes' == $this->debug) {
             $this->log->add('paypal', 'Payment IPN_status: ' . $IPN_status);
         }
 
-        $posted = stripslashes_deep($ipn_response);
+        $txn_type = (isset($ipn_response['txn_type'])) ? $ipn_response['txn_type'] : '';
+        $reason_code = (isset($ipn_response['reason_code'])) ? $ipn_response['reason_code'] : '';
+        $payment_status = (isset($ipn_response['payment_status'])) ? $ipn_response['payment_status'] : '';
+        $account_key = (isset($ipn_response['account_key'])) ? $ipn_response['account_key'] : '';
+        $transaction_type = (isset($ipn_response['transaction_type'])) ? $ipn_response['transaction_type'] : '';
+
+        if (strtoupper($transaction_type) == 'ADAPTIVE PAYMENT PREAPPROVAL' || strtoupper($transaction_type) == 'ADAPTIVE PAYMENT PAY' || !empty($account_key)) {
+            $posted = $this->decodePayPalIPN();
+            $posted['IPN_status'] = $ipn_response['IPN_status'];
+            $posted = stripslashes_deep($posted);
+        } else {
+            $posted = stripslashes_deep($ipn_response);
+        }
 
         if (isset($posted['txn_type']) && $posted['txn_type'] == 'masspay') {
 
@@ -230,7 +262,12 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
                 array_push($cart_items, $current_item);
                 $i++;
             }
-            $posted['cart_items'] = $cart_items;
+
+            // If cart_items is not emptry
+            if (is_array($cart_items) && !empty($cart_items)) {
+                $posted['cart_items'] = $cart_items;
+            }
+
             $this->successfull_request_handler($posted);
             $this->ipn_response_data_handler($posted);
         }
@@ -257,6 +294,19 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
             do_action('paypal_ipn_for_wordpress_payment_status_' . strtolower($posted['payment_status']), $posted);
         }
 
+        if (isset($posted['status']) && !empty($posted['status'])) {
+
+            if ('yes' == $this->debug) {
+                $this->log->add('paypal', 'Payment status: ' . $posted['status']);
+            }
+
+            /* developers to trigger their own functions based on different status values received by PayPal IPN's.
+             * $posted array contain all the response variable from received by PayPal IPN's
+             */
+
+            do_action('paypal_ipn_for_wordpress_adaptive_status_' . strtolower(str_replace(' ', '_', $posted['status'])), $posted);
+        }
+
         if (isset($posted['txn_type']) && !empty($posted['txn_type'])) {
 
             if ('yes' == $this->debug) {
@@ -268,6 +318,23 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
              */
 
             do_action('paypal_ipn_for_wordpress_txn_type_' . strtolower($posted['txn_type']), $posted);
+        }
+
+        if (isset($posted['transaction_type']) && !empty($posted['transaction_type'])) {
+
+            if ('yes' == $this->debug) {
+                $this->log->add('paypal', 'Payment transaction type: ' . $posted['transaction_type']);
+            }
+
+            /* developers to trigger their own functions based on different transaction_type values received by PayPal IPN's.
+             * $posted array contain all the response variable from received by PayPal IPN's
+             */
+
+            if($posted['transaction_type'] == 'Adjustment') {
+            	do_action('paypal_ipn_for_wordpress_adaptive' . strtolower(str_replace(' ', '_', $posted['transaction_type'])), $posted);
+            } else {
+            	do_action('paypal_ipn_for_wordpress_' . strtolower(str_replace(' ', '_', $posted['transaction_type'])), $posted);
+            }
         }
 
         /**
@@ -306,12 +373,20 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
 
             if (isset($posted['txn_id'])) {
                 $paypal_txn_id = $posted['txn_id'];
-            } elseif ($posted['subscr_id']) {
+            } elseif (isset($posted['subscr_id'])) {
                 $paypal_txn_id = $posted['subscr_id'];
-            } elseif ($posted['recurring_payment_id']) {
+            } elseif (isset($posted['recurring_payment_id'])) {
                 $paypal_txn_id = $posted['recurring_payment_id'];
-            } elseif ($posted['masspay_txn_id']) {
+            } elseif (isset($posted['masspay_txn_id'])) {
                 $paypal_txn_id = $posted['masspay_txn_id'];
+            } elseif (isset($posted['transaction_id'])) {
+                $paypal_txn_id = $posted['transaction_id'];
+            } elseif (isset($posted['account_key'])) {
+                $paypal_txn_id = $posted['account_key'];
+            } elseif (isset($posted['preapproval_key'])) {
+                $paypal_txn_id = $posted['preapproval_key'];
+            } elseif (isset($posted['pay_key'])) {
+                $paypal_txn_id = $posted['pay_key'];
             }
 
             $new_posted = $this->paypal_ipn_for_wordpress_parse_ipn_data($posted);
@@ -329,15 +404,17 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
                 }
             }
 
-            if ($this->paypal_ipn_for_wordpress_exist_post_by_title($paypal_txn_id) == false) {
+            if (isset($new_posted['txn_type_own'])) {
+                $post_status = $new_posted['txn_type_own'];
+            } elseif (isset($posted['txn_type'])) {
+                $post_status = $new_posted['txn_type'];
+            } elseif (isset($posted['transaction_type'])) {
+                $post_status = $new_posted['transaction_type'];
+            } else {
+                $post_status = 'Not-Available';
+            }
 
-                if (isset($new_posted['txn_type_own'])) {
-                    $post_status = $new_posted['txn_type_own'];
-                } elseif (isset($posted['txn_type'])) {
-                    $post_status = $new_posted['txn_type'];
-                } else {
-                    $post_status = 'Not-Available';
-                }
+            if ($this->paypal_ipn_for_wordpress_exist_post_by_title($paypal_txn_id) == false) {
 
                 $insert_ipn_array = array(
                     'ID' => '',
@@ -413,6 +490,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
         $txn_type = (isset($posted['txn_type'])) ? $posted['txn_type'] : '';
         $reason_code = (isset($posted['reason_code'])) ? $posted['reason_code'] : '';
         $payment_status = (isset($posted['payment_status'])) ? $posted['payment_status'] : '';
+        $account_key = (isset($posted['account_key'])) ? $posted['account_key'] : '';
+        $transaction_type = (isset($posted['transaction_type'])) ? $posted['transaction_type'] : '';
 
         if (strtoupper($txn_type) == 'NEW_CASE' || strtoupper($payment_status) == 'REVERSED' || strtoupper($payment_status) == 'CANCELED_REVERSAL' || strtoupper($txn_type) == 'ADJUSTMENT') {
 
@@ -450,12 +529,171 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
         } elseif (strtoupper($reason_code) != 'REFUND' && ( strtoupper($txn_type) == 'CART' || strtoupper($txn_type) == 'EXPRESS_CHECKOUT' || strtoupper($txn_type) == 'VIRTUAL_TERMINAL' || strtoupper($txn_type) == 'WEB_ACCEPT' || strtoupper($txn_type) == 'SEND_MONEY' || strtoupper($txn_type) == 'INVOICE_PAYMENT' || strtoupper($txn_type) == 'PRO_HOSTED' )) {
 
             $newposted['txn_type_own'] = 'orders';
+        } elseif (strtoupper($transaction_type) == 'ADAPTIVE PAYMENT PREAPPROVAL' || strtoupper($transaction_type) == 'ADAPTIVE PAYMENT PAY' || !empty($account_key)) {
+
+            $newposted['txn_type_own'] = 'adaptive_paments';
         } else {
 
             $newposted['txn_type_own'] = 'other';
         }
 
         return $newposted;
+    }
+
+    /**
+     * IPN validation request for adaptive paments
+     *
+     * @param unknown_type $posted
+     * @return unknown
+     * @since    1.0.4
+     */
+    public function paypal_ipn_for_wordpress_check_adaptive_paments_is_vlidate($posted = null) {
+        $return = array();
+        $txn_type = (isset($posted['txn_type'])) ? $posted['txn_type'] : '';
+        $reason_code = (isset($posted['reason_code'])) ? $posted['reason_code'] : '';
+        $payment_status = (isset($posted['payment_status'])) ? $posted['payment_status'] : '';
+        $account_key = (isset($posted['account_key'])) ? $posted['account_key'] : '';
+        $transaction_type = (isset($posted['transaction_type'])) ? $posted['transaction_type'] : '';
+
+        if (strtoupper($transaction_type) == 'ADAPTIVE PAYMENT PREAPPROVAL' || strtoupper($transaction_type) == 'ADAPTIVE PAYMENT PAY' || !empty($account_key)) {
+
+            $raw_post_data = file_get_contents('php://input');
+            $raw_post_array = explode('&', $raw_post_data);
+
+            $myPost = array();
+
+            foreach ($raw_post_array as $keyval) {
+                $keyval = explode('=', $keyval);
+                if (count($keyval) == 2)
+                    $myPost[$keyval[0]] = urldecode($keyval[1]);
+            }
+
+            // read the post from PayPal system and add 'cmd'
+            $req = 'cmd=_notify-validate';
+            if (function_exists('get_magic_quotes_gpc')) {
+                $get_magic_quotes_exists = true;
+            }
+
+            foreach ($myPost as $key => $value) {
+                if ($get_magic_quotes_exists == true && get_magic_quotes_gpc() == 1) {
+                    $value = urlencode(stripslashes($value));
+                } else {
+                    $value = urlencode($value);
+                }
+                $req .= "&$key=$value";
+            }
+
+            $is_sandbox = (isset($posted['test_ipn'])) ? 'yes' : 'no';
+
+            if ('yes' == $is_sandbox) {
+                $paypal_url = $this->testurl;
+            } else {
+                $paypal_url = $this->liveurl;
+            }
+
+            $ch = curl_init($paypal_url);
+            if ($ch == FALSE) {
+                return FALSE;
+            }
+
+            $is_enable_curl = function_exists('curl_init') ? true : false;
+
+            if ($is_enable_curl == false) {
+                if ('yes' == $this->debug) {
+                    $this->log->add('paypal', "cURL is not enabled", true);
+                }
+            }
+
+
+            curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $req);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+            curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+
+            if ('yes' == $this->debug) {
+                curl_setopt($ch, CURLOPT_HEADER, 1);
+                curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
+            }
+
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+            $res = curl_exec($ch);
+
+            if (curl_errno($ch) != 0) { // cURL error
+                if ('yes' == $this->debug) {
+                    $this->log->add('paypal', "Can't connect to PayPal to validate IPN message: " . print_r(curl_error($ch), true));
+                }
+                curl_close($ch);
+                exit;
+            } else {
+                if ('yes' == $this->debug) {
+                    $this->log->add('paypal', 'HTTP response of validation request: ' . print_r($req, true));
+                }
+                curl_close($ch);
+            }
+            $tokens = explode("\r\n\r\n", trim($res));
+            $res = trim(end($tokens));
+            if (strcmp($res, "VERIFIED") == 0) {
+                if ('yes' == $this->debug) {
+                    $this->log->add('paypal', 'Verified IPN: ' . print_r($res, true));
+                }
+                return true;
+            } else if (strcmp($res, "INVALID") == 0) {
+
+                if ('yes' == $this->debug) {
+                    $this->log->add('paypal', 'Invalid IPN: ' . print_r($res, true));
+                }
+                return false;
+            }
+        } else {
+            return $return['validate'] = 'required_to_check';
+        }
+    }
+
+    public function decodePayPalIPN() {
+        $raw_post = file_get_contents("php://input");
+        if (empty($raw_post)) {
+            return array();
+        } // else:
+        $post = array();
+        $pairs = explode('&', $raw_post);
+        foreach ($pairs as $pair) {
+            list($key, $value) = explode('=', $pair, 2);
+            $key = urldecode($key);
+            $value = urldecode($value);
+            // This is look for a key as simple as 'return_url' or as complex as 'somekey[x].property'
+            preg_match('/(\w+)(?:\[(\d+)\])?(?:\.(\w+))?/', $key, $key_parts);
+            switch (count($key_parts)) {
+                case 4:
+                    // Original key format: somekey[x].property
+                    // Converting to $post[somekey][x][property]
+                    if (!isset($post[$key_parts[1]])) {
+                        $post[$key_parts[1]] = array($key_parts[2] => array($key_parts[3] => $value));
+                    } else if (!isset($post[$key_parts[1]][$key_parts[2]])) {
+                        $post[$key_parts[1]][$key_parts[2]] = array($key_parts[3] => $value);
+                    } else {
+                        $post[$key_parts[1]][$key_parts[2]][$key_parts[3]] = $value;
+                    }
+                    break;
+                case 3:
+                    // Original key format: somekey[x]
+                    // Converting to $post[somkey][x]
+                    if (!isset($post[$key_parts[1]])) {
+                        $post[$key_parts[1]] = array();
+                    }
+                    $post[$key_parts[1]][$key_parts[2]] = $value;
+                    break;
+                default:
+                    // No special format
+                    $post[$key] = $value;
+                    break;
+            }
+        }
+
+        return $post;
     }
 
 }
