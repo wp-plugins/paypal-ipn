@@ -8,5 +8,16 @@
 }
 
 .widefat td {
-	word-break: break-all;
+    word-break: break-all;
+}
+
+#the-list tr.sandbox_warning, #the-list tr.sandbox_warning td a, #the-list tr.sandbox_warning td {
+    background-color: #FFD;
+    color: #26306b;
+}
+pre.prettyprint {
+    word-wrap: break-word;
+}
+.content_padding {
+	padding-left: 16px;
 }
