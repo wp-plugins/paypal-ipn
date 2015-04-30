@@ -55,8 +55,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
      */
     public function __construct() {
 
-        $this->plugin_name = 'PayPal IPN for WordPress';
-        $this->version = '1.0.4';
+        $this->plugin_name = 'paypal-ipn';
+        $this->version = '1.0.5';
 
         $this->load_dependencies();
         $this->set_locale();
@@ -67,6 +67,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
         add_action('init', array($this, 'add_endpoint'), 0);
         // handle paypal-ipn-for-wordpress-api endpoint requests
         add_action('parse_request', array($this, 'handle_api_requests'), 0);
+        // Create folder and file if not exist
+        add_action('init', array($this, 'create_required_files'), 0);
 
         add_action('paypal_ipn_for_wordpress_api_ipn_handler', array($this, 'paypal_ipn_for_wordpress_api_ipn_handler'));
 
@@ -75,7 +77,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
          * http://stackoverflow.com/questions/22577727/problems-adding-action-links-to-wordpress-plugin
          */
         $prefix = is_network_admin() ? 'network_admin_' : '';
-        add_filter("{$prefix}plugin_action_links_" . PIW_PLUGIN_BASENAME ,array($this,'plugin_action_links'),10,4);
+        add_filter("{$prefix}plugin_action_links_" . PIW_PLUGIN_BASENAME, array($this, 'plugin_action_links'), 10, 4);
     }
 
     /**
@@ -86,17 +88,16 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
      * @param array $actions associative array of action names to anchor tags
      * @return array associative array of plugin action links
      */
-    public function plugin_action_links($actions, $plugin_file, $plugin_data, $context)
-    {
+    public function plugin_action_links($actions, $plugin_file, $plugin_data, $context) {
         $custom_actions = array(
-            'configure' => sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=paypal-ipn-for-wordpress-option' ), __( 'Configure', 'paypal-ipn' ) ),
-            'docs'      => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link&utm_campaign=paypal_ipn_for_wordpress', __( 'Docs', 'paypal-ipn' ) ),
-            'support'   => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/plugin/paypal-ipn/', __( 'Support', 'paypal-ipn' ) ),
-            'review'    => sprintf( '<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/view/plugin-reviews/paypal-ipn', __( 'Write a Review', 'paypal-ipn' ) ),
+            'configure' => sprintf('<a href="%s">%s</a>', admin_url('options-general.php?page=paypal-ipn-for-wordpress-option'), __('Configure', 'paypal-ipn')),
+            'docs' => sprintf('<a href="%s" target="_blank">%s</a>', 'http://www.angelleye.com/category/docs/paypal-ipn-for-wordpress/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link&utm_campaign=paypal_ipn_for_wordpress', __('Docs', 'paypal-ipn')),
+            'support' => sprintf('<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/plugin/paypal-ipn/', __('Support', 'paypal-ipn')),
+            'review' => sprintf('<a href="%s" target="_blank">%s</a>', 'http://wordpress.org/support/view/plugin-reviews/paypal-ipn', __('Write a Review', 'paypal-ipn')),
         );
 
         // add the links to the front of the actions list
-        return array_merge( $custom_actions, $actions );
+        return array_merge($custom_actions, $actions);
     }
 
     /**
@@ -145,14 +146,14 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
          * side of the site.
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-paypal-ipn-for-wordpress-paypal-helper.php';
-        
+
         /**
          * The class responsible for defining all action for IPN forwarder related functon
          * side of the site.
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-paypal-ipn-for-wordpress-paypal-ipn-forwarder.php';
-        
-        
+
+
 
         $this->loader = new AngellEYE_Paypal_Ipn_For_Wordpress_Loader();
     }
@@ -185,9 +186,9 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
 
         $plugin_admin = new AngellEYE_Paypal_Ipn_For_Wordpress_Admin($this->get_plugin_name(), $this->get_version());
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
-        $this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-        $this->loader->add_action( 'posts_where_request', $plugin_admin, 'paypal_ipn_for_wordpress_modify_wp_search' );
-
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+        $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'admin_enqueue_scripts');
+        $this->loader->add_action('posts_where_request', $plugin_admin, 'paypal_ipn_for_wordpress_modify_wp_search');
     }
 
     /**
@@ -299,6 +300,37 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     private function define_constants() {
         if (!defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) {
             define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', ABSPATH . 'paypal-ipn-logs/');
+        }
+    }
+
+    /**
+     * Create folder and file if not exist
+     *
+     */
+    public function create_required_files() {
+        // Install files and folders for uploading files and prevent hotlinking
+        $upload_dir = wp_upload_dir();
+
+        $files = array(
+            array(
+                'base' => PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR,
+                'file' => '.htaccess',
+                'content' => 'deny from all'
+            ),
+            array(
+                'base' => PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR,
+                'file' => 'index.html',
+                'content' => ''
+            )
+        );
+
+        foreach ($files as $file) {
+            if (wp_mkdir_p($file['base']) && !file_exists(trailingslashit($file['base']) . $file['file'])) {
+                if ($file_handle = @fopen(trailingslashit($file['base']) . $file['file'], 'w')) {
+                    fwrite($file_handle, $file['content']);
+                    fclose($file_handle);
+                }
+            }
         }
     }
 

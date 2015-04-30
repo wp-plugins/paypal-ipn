@@ -29,8 +29,13 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_i18n {
      */
     public function load_plugin_textdomain() {
 
+
+        $locale = apply_filters('plugin_locale', get_locale(), $this->domain);
+
+        load_textdomain($this->domain, WP_LANG_DIR . '/' . $this->domain . '/' . $this->domain . '-' . $locale . '.mo');
+
         load_plugin_textdomain(
-                $this->domain, false, dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
+                $this->domain, false, PIW_PLUGIN_LOCALE . '/languages/'
         );
     }
 

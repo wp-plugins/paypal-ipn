@@ -1,10 +1,10 @@
 === PayPal IPN for WordPress ===
 Contributors: angelleye
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SG9SQU2GBXJNA
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RP48QUAJW2ZT4
 Tags: paypal, ipn, instant payment notification, automation
 Requires at least: 3.8
-Tested up to: 4.2
-Stable tag: 1.0.4
+Tested up to: 4.2.1
+Stable tag: 1.0.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,6 +19,14 @@ A PayPal Instant Payment Notification (IPN) toolkit that helps you automate task
  * All PayPal IPN data is saved and available in your WordPress admin panel.
  * Developer hooks are provided for triggering events based on the transaction type or payment status of the IPN.
  * Extend the plugin with your own plugins or theme functions, or check out our premium extensions for easy automation of various tasks.
+
+= Localization =
+The PayPal Express Checkout buttons and checkout pages will translate based off your WordPress language setting by default.  The rest of the plugin was also developed with localization in mind and is ready for translation.
+
+If you're interested in helping translate please [let us know](http://www.angelleye.com/contact-us/)!
+
+= Get Involved =
+Developers can contribute to the source code on the [PayPal IPN for WordPress Git repository on BitBucket](https://bitbucket.org/angelleye/paypal-ipn-for-wordpress).
 
 == Installation ==
 
@@ -74,6 +82,14 @@ You can automate all sorts of things with IPN, so the list really goes on and on
 * Take a look at [this article I wrote covering the topic of general IPN testing and troubleshooting](https://www.angelleye.com/test-paypal-ipn/).  I think it will help!
 
 == Changelog ==
+
+= 1.0.5 - 04.30.2015 =
+* Fix - Resolves a number of minor bugs.
+* Fix - Adds the BAID in the post title for Billing Agreement IPNs.
+* Tweak - Adds separate hook for MassPay transactions based on payment status.
+* Tweak - Updates the log path to /wp-content/uploads/paypal-ipn-logs/
+* Feature - Highlights PayPal sandbox IPNs yellow so that they are easy to recognize.
+* Feature - Adds hook function snippet to IPN details page which provides a function template including IPN data parsed to PHP vars.
 
 = 1.0.4 - 03.26.2015 =
 * Fix - Resolves issue where direct hits to the IPN URL were creating empty records in the system.

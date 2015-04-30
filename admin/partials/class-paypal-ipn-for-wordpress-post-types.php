@@ -32,6 +32,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         add_action('add_meta_boxes', array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_custome_fields'), 31);
         add_filter('paypal_ipn_for_wordpress_the_meta_key', array(__CLASS__, 'paypal_ipn_for_wordpress_the_meta_key_remove_raw_dump'), 10, 3);
         add_action('add_meta_boxes', array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_serialized'), 31);
+        add_action('add_meta_boxes', array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_provide_hook_function_snippets'), 31);
         add_filter('post_class', array(__CLASS__, 'paypal_ipn_for_wordpress_post_class_representation'), 10, 3);
     }
 
@@ -88,22 +89,22 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
         register_post_type('paypal_ipn', apply_filters('paypal_ipn_for_wordpress_register_post_type_ipn', array(
             'labels' => array(
-                'name' => __('PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'singular_name' => __('PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'menu_name' => _x('PayPal IPN', 'Admin menu name', 'paypal_ipn_for_wordpress'),
-                'add_new' => __('Add PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'add_new_item' => __('Add New PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'edit' => __('Edit', 'paypal_ipn_for_wordpress'),
-                'edit_item' => __('View PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'new_item' => __('New PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'view' => __('View PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'view_item' => __('View PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'search_items' => __('Search PayPal IPN', 'paypal_ipn_for_wordpress'),
-                'not_found' => __('No PayPal IPN found', 'paypal_ipn_for_wordpress'),
-                'not_found_in_trash' => __('No PayPal IPN found in trash', 'paypal_ipn_for_wordpress'),
-                'parent' => __('Parent PayPal IPN', 'paypal_ipn_for_wordpress')
+                'name' => __('PayPal IPN', 'paypal-ipn'),
+                'singular_name' => __('PayPal IPN', 'paypal-ipn'),
+                'menu_name' => _x('PayPal IPN', 'Admin menu name', 'paypal-ipn'),
+                'add_new' => __('Add PayPal IPN', 'paypal-ipn'),
+                'add_new_item' => __('Add New PayPal IPN', 'paypal-ipn'),
+                'edit' => __('Edit', 'paypal-ipn'),
+                'edit_item' => __('View PayPal IPN', 'paypal-ipn'),
+                'new_item' => __('New PayPal IPN', 'paypal-ipn'),
+                'view' => __('View PayPal IPN', 'paypal-ipn'),
+                'view_item' => __('View PayPal IPN', 'paypal-ipn'),
+                'search_items' => __('Search PayPal IPN', 'paypal-ipn'),
+                'not_found' => __('No PayPal IPN found', 'paypal-ipn'),
+                'not_found_in_trash' => __('No PayPal IPN found in trash', 'paypal-ipn'),
+                'parent' => __('Parent PayPal IPN', 'paypal-ipn')
             ),
-            'description' => __('This is where you can add new IPN to your store.', 'paypal_ipn_for_wordpress'),
+            'description' => __('This is where you can add new IPN to your store.', 'paypal-ipn'),
             'public' => false,
             'show_ui' => true,
             'capability_type' => 'post',
@@ -161,19 +162,19 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         if ($typenow == 'paypal_ipn') {
             ?>
 
-            <select name="post_status" class="dropdown_post_status">
-                <option value="0"><?php _e('Show all Transaction types'); ?></option>
+
+            <select name="test_ipn" class="dropdown_post_status">
+                <option value="-1"><?php _e('Show All Transaction', 'paypal-ipn'); ?></option>
                 <?php
-                $ipn_post_status_list = self::paypal_ipn_for_wordpress_get_ipn_status_filter();
-                $sectiongroup = array('Recurring payments p' => 'Recurring Payments Profile', 'Subscription payment' => 'Subscription Payments');
-                foreach ($ipn_post_status_list as $ipn_post_status) :
-                    $ipn_post_status_display_name = ucfirst(str_replace('_', ' ', $ipn_post_status));
-                    if (array_key_exists($ipn_post_status_display_name, $sectiongroup)) {
-                        $ipn_post_status_display_name = $sectiongroup[$ipn_post_status_display_name];
+                $transaction_mode = array('0' => 'Live Transaction', '1' => 'Sandbox Transaction');
+                foreach ($transaction_mode as $transaction_mode_key => $transaction_mode_value) :
+                    if (isset($_GET['test_ipn']) && $_GET['test_ipn'] == $transaction_mode_key) {
+                        $selected_status = 'selected="selected"';
+                    } else {
+                        $selected_status = '';
                     }
-                    $selected_status = (isset($wp_query->query['post_status']) && $wp_query->query['post_status'] == $ipn_post_status ? 'selected="selected"' : '');
                     ?>
-                    <option value="<?php echo esc_attr($ipn_post_status); ?>" <?php echo esc_attr($selected_status); ?>><?php echo esc_html(ucwords($ipn_post_status_display_name)); ?></option>
+                    <option value="<?php echo esc_attr($transaction_mode_key); ?>" <?php echo esc_attr($selected_status); ?>><?php echo esc_html(ucwords($transaction_mode_value)); ?></option>
                 <?php endforeach; ?>
             </select>
 
@@ -192,7 +193,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
                 ?>
 
                 <select name="paypal_ipn_type" class="dropdown_product_cat">
-                    <option value="0"><?php _e('Show all payment status'); ?></option>
+                    <option value="0"><?php _e('Show all Payment Statuses', 'paypal-ipn'); ?></option>
                     <?php
                     $ipn_type_list = get_categories($args);
                     foreach ($ipn_type_list as $ipn_type) :
@@ -252,13 +253,13 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
     public static function paypal_ipn_for_wordpress_add_paypal_ipn_columns($existing_columns) {
         $columns = array();
         $columns['cb'] = '<input type="checkbox" />';
-        $columns['title'] = _x('Transaction ID', 'column name');
-        $columns['invoice'] = _x('Invoice ID', 'column name');
-        $columns['payment_date'] = _x('Date', 'column name');
-        $columns['first_name'] = _x('Name / Company', 'column name');
-        $columns['mc_gross'] = __('Amount', 'column name');
-        $columns['txn_type'] = __('Transaction Type', 'column name');
-        $columns['payment_status'] = __('Payment status');
+        $columns['title'] = _x('Transaction ID', 'paypal-ipn');
+        $columns['invoice'] = _x('Invoice ID', 'paypal-ipn');
+        $columns['payment_date'] = _x('Date', 'paypal-ipn');
+        $columns['first_name'] = _x('Name / Company', 'paypal-ipn');
+        $columns['mc_gross'] = __('Amount', 'paypal-ipn');
+        $columns['txn_type'] = __('Transaction Type', 'paypal-ipn');
+        $columns['payment_status'] = __('Payment Status', 'paypal-ipn');
         return $columns;
     }
 
@@ -284,18 +285,18 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
                 break;
             case 'payment_date' :
                 $payment_date = esc_attr(get_post_meta($post->ID, 'payment_date', true));
-                if( isset($payment_date) && !empty($payment_date) ) {
-                	echo $payment_date;
+                if (isset($payment_date) && !empty($payment_date)) {
+                    echo $payment_date;
                 } else {
-                	 $payment_date = esc_attr(get_post_meta($post->ID, 'payment_request_date', true));
-                	 if( isset($payment_date) && !empty($payment_date) ) {
-                	 	echo $payment_date;
-                	 }
+                    $payment_date = esc_attr(get_post_meta($post->ID, 'payment_request_date', true));
+                    if (isset($payment_date) && !empty($payment_date)) {
+                        echo $payment_date;
+                    }
                 }
                 break;
             case 'first_name' :
                 echo esc_attr(get_post_meta($post->ID, 'first_name', true) . ' ' . get_post_meta($post->ID, 'last_name', true));
-                echo (get_post_meta($post->ID, 'payer_business_name', true)) ? ' / ' . get_post_meta($post->ID, 'payer_business_name', true) : '';
+                echo (get_post_meta($post->ID, 'payer_business_name', true)) ? '<br />' . get_post_meta($post->ID, 'payer_business_name', true) : '';
                 break;
             case 'mc_gross' :
                 $mc_gross = get_post_meta($post->ID, 'mc_gross', true);
@@ -372,8 +373,20 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         if (is_admin() && isset($_GET['post_type']) && $_GET['post_type'] == 'paypal_ipn' && isset($_GET['orderby']) && $_GET['orderby'] != 'None') {
             $query->query_vars['orderby'] = 'meta_value';
             $query->query_vars['meta_key'] = $_GET['orderby'];
+            if (isset($query->query_vars['s']) && empty($query->query_vars['s'])) {
+                $query->is_search = false;
+            }
+            if (isset($_GET['test_ipn']) && $_GET['test_ipn'] != '-1') {
+                $query->set('meta_query', array(array('key' => 'test_ipn', 'value' => $_GET['test_ipn'], 'compare' => '=')));
+            }
         } else {
-            return $query;
+
+            if (isset($_GET['test_ipn']) && $_GET['test_ipn'] != '-1') {
+                $query->set('meta_query', array(array('key' => 'test_ipn', 'value' => $_GET['test_ipn'], 'compare' => '=')));
+                if (isset($query->query_vars['s']) && empty($query->query_vars['s'])) {
+                    $query->is_search = false;
+                }
+            }
         }
     }
 
@@ -453,7 +466,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
                 echo apply_filters('paypal_ipn_for_wordpress_the_meta_key', "<tr><th class='post-meta-key'>$key:</th> <td>$value</td></tr>", $key, $value);
             }
             echo "</table>";
-            echo "</div";
+            echo "</div>";
         }
     }
 
@@ -479,6 +492,16 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
     }
 
     /**
+     * paypal_ipn_for_wordpress_add_meta_boxes_provide_hook_function_snippets function used for register own meta_box for display Provide hook function snippets in the IPN detail page
+     * @since    1.0.0
+     * @access   public
+     */
+    public static function paypal_ipn_for_wordpress_add_meta_boxes_provide_hook_function_snippets() {
+
+        add_meta_box('paypal-ipn-for-wordpress-ipn-function', __('Hook Function Snippet', 'paypal-ipn'), array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_hook_function_snippets'), 'paypal_ipn', 'advanced', 'high');
+    }
+
+    /**
      * paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_box helper function used for display IPN row data to bottom of detail section
      * @since    1.0.0
      * @access   public
@@ -488,6 +511,68 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         $post_id = $post->ID;
         echo '<pre />';
         print_r(maybe_unserialize(get_post_meta($post_id, 'ipn data serialized', true)));
+    }
+
+    /**
+     * paypal_ipn_for_wordpress_add_meta_boxes_hook_function_snippets helper function used for display IPN row data to bottom of detail section
+     * @since    1.0.0
+     * @access   public
+     */
+    public static function paypal_ipn_for_wordpress_add_meta_boxes_hook_function_snippets() {
+        global $post;
+        $post_id = $post->ID;
+
+        $postedtest = maybe_unserialize(get_post_meta($post_id, 'ipn data serialized', true));
+        $txn_type = get_post_meta($post_id, 'txn_type', true);
+        $transaction_type = get_post_meta($post_id, 'transaction_type', true);
+
+        if (isset($txn_type) && !empty($txn_type)) {
+            $txn_type_name = $txn_type;
+            $txn_type_name = strtolower(str_replace(' ', '_', $txn_type_name));
+            $hookname = "'paypal_ipn_for_wordpress_txn_type_$txn_type_name'";
+            $function_name_hook = "'process_$txn_type_name'";
+            $function_name = "process_" . $txn_type_name;
+        } elseif (isset($transaction_type) || $transaction_type == 'Adjustment' || $transaction_type = 'Adaptive Payment PAY' || $transaction_type = 'Adaptive Payment Pay') {
+            $txn_type_name = $transaction_type;
+            $txn_type_name = strtolower(str_replace(' ', '_', $txn_type_name));
+            $hookname = "'paypal_ipn_for_wordpress_adaptive_$txn_type_name'";
+            $function_name_hook = "'process_$txn_type_name'";
+            $function_name = "process_" . $txn_type_name;
+        }
+        ?>
+        <div>
+            <h3><?php _e('Extending PayPal IPN for WordPress', 'paypal-ipn'); ?></h3>
+            <p class="content_padding"><?php _e('PayPal IPN for WordPress provides a <a target="_blank" href="https://www.angelleye.com/paypal-ipn-for-wordpress-developer-guide/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link_ipn_details&utm_campaign=paypal_ipn_for_wordpress">wide variety of developer hooks</a> that you can use within your theme or plugins to trigger your own function(s).  There are hooks available based on the IPN type as well as the payment status of a transaction.', 'paypal-ipn'); ?></p>
+            <p class="content_padding"><?php _e('The code snippet below is a template that you can use to quickly setup your own hook functions.  You can see that it prepares all of the possible data for the IPN in PHP variables for you for easy access to the values within your code.  Just set the "hook_name" to the hook you would like to use to trigger the function, and set the "function_name" to the name of the function you’re using in your theme/plugin.', 'paypal-ipn'); ?></p>
+        </div>
+        <?php
+
+        if (isset($txn_type_name) && !empty($txn_type_name)) :
+            $code_prettyprint_txn_type = '';
+            echo '<pre class="prettyprint" id="prettyprint">';
+            $posted = '$posted';
+            $code_prettyprint_txn_type = PHP_EOL . PHP_EOL;
+            $code_prettyprint_txn_type .= "   add_action('hook_name', 'function_name', 10, 1);
+        function function_name(" . $posted . ") {" . PHP_EOL . PHP_EOL;
+            $code_prettyprint_txn_type .= "              // Parse data from IPN " . $posted . " array" . PHP_EOL . PHP_EOL;
+            foreach ($postedtest as $postedtestkey => $postedtestvalue) {
+                if (isset($postedtestvalue) && !empty($postedtestvalue)) {
+                    $code_prettyprint_txn_type .= "              $" . $postedtestkey . " = " . "isset(" . "$" . "posted['" . $postedtestkey . "']) ? " . "$" . "posted['" . $postedtestkey . "'] : '';" . PHP_EOL;
+                }
+            }
+            $code_prettyprint_txn_type .= "
+            /**
+            * At this point you can use the data to generate email notifications,
+            * update your local database, hit 3rd party web services, or anything
+            * else you might want to automate based on this type of IPN.
+            */";
+            $code_prettyprint_txn_type .= "
+        }" . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL;
+
+            print_r($code_prettyprint_txn_type);
+            echo '</pre>';
+        endif;
+       
     }
 
     /**
@@ -502,6 +587,11 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
             $transaction_type = get_post_meta($post->ID, 'IPN_status', true);
             if ($transaction_type == 'Invalid') {
                 $classes[] = 'warning';
+            }
+
+            $test_ipn = get_post_meta($post->ID, 'test_ipn', true);
+            if ($test_ipn == '1') {
+                $classes[] = 'sandbox_warning';
             }
         }
 

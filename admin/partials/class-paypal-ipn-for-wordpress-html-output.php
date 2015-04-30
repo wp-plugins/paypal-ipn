@@ -318,7 +318,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Html_output {
                         ?><tr valign="top" class="single_select_page">
                             <th scope="row" class="titledesc"><?php echo esc_html($value['title']) ?> <?php echo $tip; ?></th>
                             <td class="forminp">
-                                <?php echo str_replace(' id=', " data-placeholder='" . __('Select a page&hellip;', 'Option') . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages($args)); ?> <?php echo $description; ?>
+                                <?php echo str_replace(' id=', " data-placeholder='" . __('Select a page&hellip;', 'paypal-ipn') . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages($args)); ?> <?php echo $description; ?>
                             </td>
                         </tr><?php
                         break;

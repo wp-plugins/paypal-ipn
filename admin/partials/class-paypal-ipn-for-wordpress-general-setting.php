@@ -46,29 +46,35 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_General_Setting {
             <table class="form-table" id="paypal_ipn_primary_url">
                 <tbody>
                     <tr valign="top">
-                        <th scope="row"><label for="paypal_ipn_primary_url"><?php echo __('PayPal IPN Primary URL:', 'Option') ?></label></th>
+                        <th scope="row"><label for="paypal_ipn_primary_url"><?php echo __('PayPal IPN Primary URL:', 'paypal-ipn') ?></label></th>
                         <td class="forminp forminp-text">
                             <input type="text" class="large-text code" name="paypal_ipn_primary_url" value="<?php echo site_url('?AngellEYE_Paypal_Ipn_For_Wordpress&action=ipn_handler'); ?>" readonly>
-                            <p class="description"><?php _e('Take a look at the '); ?> <a href="https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNSetup/" target="_blank">PayPal IPN Configuration Guide</a><?php _e(' for details on setting up IPN with this URL.'); ?></p>
+                            <p class="description">
+                                <?php
+                                $url = 'https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNSetup/ ';
+                                echo sprintf(wp_kses(__('Take a look at the <a target="_blank" href="%s">PayPal IPN Configuration Guide</a> for details on setting up IPN with this URL.', 'paypal-ipn'), array('a' => array('href' => array(), 'target' => array('_blank', '_top')))), esc_url($url));
+                                ?>
+                            </p>
+
                         </td>
                     </tr>
 
                     <tr valign="top">
                         <th class="titledesc" scope="row">
-                            <label for="paypal_ipn_for_wordpress_paypal_debug"><?php _e('Debug Log', 'Option'); ?>:</label>
+                            <label for="paypal_ipn_for_wordpress_paypal_debug"><?php _e('Debug Log', 'paypal-ipn'); ?>:</label>
                         </th>
                         <td class="forminp">
                             <?php if (defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) { ?>
                                 <?php if (@fopen(PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR . 'test-log.log', 'a')) { ?>
                                     <fieldset>
-                                        <legend class="screen-reader-text"><span><?php echo __('Debug Log'); ?></span></legend>
+                                        <legend class="screen-reader-text"><span><?php echo __('Debug Log', 'paypal-ipn'); ?></span></legend>
                                         <label for="paypal_ipn_for_wordpress_paypal_debug">
-                                            <input type="checkbox" <?php echo (get_option('paypal_ipn_for_wordpress_paypal_debug') == '1') ? 'checked="checked"' : '' ?> value="1" id="paypal_ipn_for_wordpress_paypal_debug" name="paypal_ipn_for_wordpress_paypal_debug" class=""><?php echo __('Enable logging'); ?></label><br>
-                                        <p class="description"><?php echo __('Log PayPal events, such as IPN requests, inside'); ?> <code><?php echo PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR; ?> </code></p>
+                                            <input type="checkbox" <?php echo (get_option('paypal_ipn_for_wordpress_paypal_debug') == '1') ? 'checked="checked"' : '' ?> value="1" id="paypal_ipn_for_wordpress_paypal_debug" name="paypal_ipn_for_wordpress_paypal_debug" class=""><?php echo __('Enable logging', 'paypal-ipn'); ?></label><br>
+                                        <p class="description"><?php echo __('Log PayPal events, such as IPN requests, inside', 'paypal-ipn'); ?> <code><?php echo PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR; ?> </code></p>
                                     </fieldset>
                                 <?php } else { ?>
-                                    <p><?php printf('<mark class="error">' . __('Log directory (<code>%s</code>) is not writable. To allow logging, make this writable or define a custom <code>PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR</code>.', 'Option') . '</mark>', PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR); ?></p>
-                                <?php
+                                    <p><?php printf('<mark class="error">' . __('Log directory (<code>%s</code>) is not writable. To allow logging, make this writable or define a custom <code>PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR</code>.', 'paypal-ipn') . '</mark>', PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR); ?></p>
+                                    <?php
                                 }
                             }
                             ?>
@@ -77,7 +83,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_General_Setting {
                 </tbody>
             </table>
             <p class="submit">
-                <input type="submit" name="general_setting_integration" class="button-primary" value="<?php esc_attr_e('Save changes', 'Option'); ?>" />
+                <input type="submit" name="general_setting_integration" class="button-primary" value="<?php esc_attr_e('Save changes', 'paypal-ipn'); ?>" />
             </p>
         </form>
         <?php

@@ -1,11 +1,12 @@
 <?php
+
 /**
  *
  * @wordpress-plugin
  * Plugin Name:       PayPal IPN for WordPress
  * Plugin URI:        http://www.angelleye.com/
  * Description:       A PayPal Instant Payment Notification toolkit that helps you automate tasks in real-time when transactions hit your PayPal account.
- * Version:           1.0.4
+ * Version:           1.0.5
  * Author:            Angell EYE
  * Author URI:        http://www.angelleye.com/
  * License:           GNU General Public License v3.0
@@ -13,7 +14,6 @@
  * Text Domain:       paypal-ipn
  * Domain Path:       /languages
  */
-
 if (!defined('WPINC')) {
     die; // Exit if accessed directly
 }
@@ -21,7 +21,7 @@ if (!defined('WPINC')) {
 /**
  *  define PIW_PLUGIN_DIR constant for global use
  */
- if (!defined('PIW_PLUGIN_DIR'))
+if (!defined('PIW_PLUGIN_DIR'))
     define('PIW_PLUGIN_DIR', dirname(__FILE__));
 
 /**
@@ -29,20 +29,28 @@ if (!defined('WPINC')) {
  */
 if (!defined('PIW_PLUGIN_URL'))
     define('PIW_PLUGIN_URL', plugin_dir_url(__FILE__));
- 
- /**
-  *  define log file path
-  */
- if (!defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) {
-	define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', ABSPATH . 'paypal-ipn-logs/');
- }
- 
- /**
-  * define plugin basename
-  */
- if (!defined('PIW_PLUGIN_BASENAME')) {
-    define( 'PIW_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
- }
+
+/**
+ *  define log file path
+ */
+if (!defined('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR')) {
+    $upload_dir = wp_upload_dir();
+    define('PAYPAL_IPN_FOR_WORDPRESS_LOG_DIR', $upload_dir['basedir'] . '/paypal-ipn-logs/');
+}
+
+/**
+ * define plugin basename
+ */
+if (!defined('PIW_PLUGIN_BASENAME')) {
+    define('PIW_PLUGIN_BASENAME', plugin_basename(__FILE__));
+}
+
+/**
+ * define set_locale path
+ */
+if (!defined('PIW_PLUGIN_LOCALE')) {
+    define('PIW_PLUGIN_LOCALE', dirname(plugin_basename(__FILE__)));
+}
 
 /**
  * The code that runs during plugin activation.
