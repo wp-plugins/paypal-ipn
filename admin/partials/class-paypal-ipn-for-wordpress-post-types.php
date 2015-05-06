@@ -34,6 +34,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         add_action('add_meta_boxes', array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_ipn_data_serialized'), 31);
         add_action('add_meta_boxes', array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_provide_hook_function_snippets'), 31);
         add_filter('post_class', array(__CLASS__, 'paypal_ipn_for_wordpress_post_class_representation'), 10, 3);
+        add_action('parse_query', array(__CLASS__, 'paypal_ipn_for_wordpress_parse_query'), 10, 1);
+        
     }
 
     /**
@@ -160,10 +162,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         global $typenow, $wp_query;
 
         if ($typenow == 'paypal_ipn') {
-            ?>
-
-
-            <select name="test_ipn" class="dropdown_post_status">
+			?>
+        	<select name="test_ipn" class="dropdown_post_status">
                 <option value="-1"><?php _e('Show All Transaction', 'paypal-ipn'); ?></option>
                 <?php
                 $transaction_mode = array('0' => 'Live Transaction', '1' => 'Sandbox Transaction');
@@ -177,34 +177,22 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
                     <option value="<?php echo esc_attr($transaction_mode_key); ?>" <?php echo esc_attr($selected_status); ?>><?php echo esc_html(ucwords($transaction_mode_value)); ?></option>
                 <?php endforeach; ?>
             </select>
-
-            <?php
-            if ($typenow == 'paypal_ipn') {
-                $args = array(
-                    'type' => 'post',
-                    'child_of' => 0,
-                    'orderby' => 'name',
-                    'order' => 'ASC',
-                    'hide_empty' => 0,
-                    'hierarchical' => 1,
-                    'taxonomy' => 'paypal_ipn_type',
-                    'pad_counts' => false
-                );
-                ?>
-
-                <select name="paypal_ipn_type" class="dropdown_product_cat">
-                    <option value="0"><?php _e('Show all Payment Statuses', 'paypal-ipn'); ?></option>
-                    <?php
-                    $ipn_type_list = get_categories($args);
-                    foreach ($ipn_type_list as $ipn_type) :
-                        $selected_ipn_type = (isset($wp_query->query['paypal_ipn_type']) && $wp_query->query['paypal_ipn_type'] == $ipn_type->slug ? 'selected="selected"' : '');
-                        ?>
-                        <option value="<?php echo esc_attr($ipn_type->slug); ?>" <?php echo esc_attr($selected_ipn_type); ?>><?php echo esc_html($ipn_type->name); ?></option>
-                    <?php endforeach; ?>
-                </select>
-
-                <?php
-            }
+        	<?php 
+			$taxonomy = 'paypal_ipn_type';
+			$term = isset($wp_query->query['paypal_ipn_type']) ? $wp_query->query['paypal_ipn_type'] :'';
+			$business_taxonomy = get_taxonomy($taxonomy);
+			wp_dropdown_categories(array(
+			'show_option_all' =>  __("Show all Payment Statuses", 'paypal-ipn'),
+			'taxonomy'        =>  $taxonomy,
+			'name'            =>  'paypal_ipn_type',
+			'orderby'         =>  'name',
+			'selected'        =>  $term,
+			'hierarchical'    =>  true,
+			'depth'           =>  3,
+			'show_count'      =>  true, // Show # listings in parens
+			'hide_empty'      =>  true,
+			));
+		
         }
     }
 
@@ -597,6 +585,20 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
         return $classes;
     }
+    
+    /**
+     * Potential SQL Injection Vulnerability
+     * @since    1.0.6
+     * @access   public
+     */
+    public static function paypal_ipn_for_wordpress_parse_query($query) {
+		global $pagenow;
+		$qv = &$query->query_vars;
+		if ($pagenow=='edit.php' && isset($qv['paypal_ipn_type']) && is_numeric($qv['paypal_ipn_type'])) {
+			$term = get_term_by('id',$qv['paypal_ipn_type'],'paypal_ipn_type');
+			$qv['paypal_ipn_type'] = ($term ? $term->slug : '');
+		}
+	}
 
 }
 

@@ -56,7 +56,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     public function __construct() {
 
         $this->plugin_name = 'paypal-ipn';
-        $this->version = '1.0.5';
+        $this->version = '1.0.6';
 
         $this->load_dependencies();
         $this->set_locale();
