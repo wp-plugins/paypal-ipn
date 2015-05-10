@@ -3,7 +3,7 @@ Contributors: angelleye
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RP48QUAJW2ZT4
 Tags: paypal, ipn, instant payment notification, automation
 Requires at least: 3.8
-Tested up to: 4.2.1
+Tested up to: 4.2.2
 Stable tag: 1.0.6
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -19,6 +19,14 @@ A PayPal Instant Payment Notification (IPN) toolkit that helps you automate task
  * All PayPal IPN data is saved and available in your WordPress admin panel.
  * Developer hooks are provided for triggering events based on the transaction type or payment status of the IPN.
  * Extend the plugin with your own plugins or theme functions, or check out our premium extensions for easy automation of various tasks.
+
+= Premium Extensions =
+
+If you are not a developer (or simply wish to save some time) you can still take advantage of PayPal IPN by adding our premium extensions to this plugin.
+
+ * [PayPal IPN Forwarder](https://www.angelleye.com/product/wordpress-paypal-ipn-forwarder/) - Automatically forward PayPal's IPN data to additional IPN listener URLs.
+ * [PayPal IPN MailChimp](https://www.angelleye.com/product/paypal-ipn-for-wordpress-paypal-mailchimp-plugin/) - Automatically add the email address from PayPal transactions to a MailChimp mailing list.
+ * More coming soon!
 
 = Localization =
 The PayPal Express Checkout buttons and checkout pages will translate based off your WordPress language setting by default.  The rest of the plugin was also developed with localization in mind and is ready for translation.
