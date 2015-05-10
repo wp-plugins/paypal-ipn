@@ -53,6 +53,7 @@ In the search field type "PayPal IPN" and click Search Plugins. Once you've foun
 
 1. Categorized browser for all IPN transactions.
 2. Parsed transaction data for an individual IPN.
+3. Hook function template for copy/paste into projects.
 
 == Frequently Asked Questions ==
 
