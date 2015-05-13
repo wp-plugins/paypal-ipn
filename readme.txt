@@ -29,7 +29,7 @@ If you are not a developer (or simply wish to save some time) you can still take
  * More coming soon!
 
 = Localization =
-The PayPal Express Checkout buttons and checkout pages will translate based off your WordPress language setting by default.  The rest of the plugin was also developed with localization in mind and is ready for translation.
+PayPal IPN for WordPress was developed with localization in mind and is ready for translation.
 
 If you're interested in helping translate please [let us know](http://www.angelleye.com/contact-us/)!
 
