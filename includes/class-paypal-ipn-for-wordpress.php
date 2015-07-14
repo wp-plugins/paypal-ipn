@@ -56,12 +56,13 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
     public function __construct() {
 
         $this->plugin_name = 'paypal-ipn';
-        $this->version = '1.0.6';
+        $this->version = '1.0.7';
 
         $this->load_dependencies();
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_constants();
+        $this->define_public_hooks();
 
         // register API endpoints
         add_action('init', array($this, 'add_endpoint'), 0);
@@ -153,8 +154,11 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-paypal-ipn-for-wordpress-paypal-ipn-forwarder.php';
 
-
-
+        /**
+         * The class responsible for defining all actions that occur in the public-facing
+         * side of the site.
+         */
+        require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-paypal-ipn-for-wordpress-public.php';
         $this->loader = new AngellEYE_Paypal_Ipn_For_Wordpress_Loader();
     }
 
@@ -189,6 +193,21 @@ class AngellEYE_Paypal_Ipn_For_Wordpress {
         $this->loader->add_action('wp_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
         $this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'admin_enqueue_scripts');
         $this->loader->add_action('posts_where_request', $plugin_admin, 'paypal_ipn_for_wordpress_modify_wp_search');
+    }
+
+    /**
+     * Register all of the hooks related to the public-facing functionality
+     * of the plugin.
+     *
+     * @since    1.6.7
+     * @access   private
+     */
+    private function define_public_hooks() {
+
+        $plugin_public = new AngellEYE_Paypal_Ipn_For_Wordpress_Public($this->get_plugin_name(), $this->get_version());
+
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+        $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
     }
 
     /**

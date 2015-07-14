@@ -35,7 +35,6 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         add_action('add_meta_boxes', array(__CLASS__, 'paypal_ipn_for_wordpress_add_meta_boxes_provide_hook_function_snippets'), 31);
         add_filter('post_class', array(__CLASS__, 'paypal_ipn_for_wordpress_post_class_representation'), 10, 3);
         add_action('parse_query', array(__CLASS__, 'paypal_ipn_for_wordpress_parse_query'), 10, 1);
-        
     }
 
     /**
@@ -162,8 +161,8 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         global $typenow, $wp_query;
 
         if ($typenow == 'paypal_ipn') {
-			?>
-        	<select name="test_ipn" class="dropdown_post_status">
+            ?>
+            <select name="test_ipn" class="dropdown_post_status">
                 <option value="-1"><?php _e('Show All Transaction', 'paypal-ipn'); ?></option>
                 <?php
                 $transaction_mode = array('0' => 'Live Transaction', '1' => 'Sandbox Transaction');
@@ -177,22 +176,21 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
                     <option value="<?php echo esc_attr($transaction_mode_key); ?>" <?php echo esc_attr($selected_status); ?>><?php echo esc_html(ucwords($transaction_mode_value)); ?></option>
                 <?php endforeach; ?>
             </select>
-        	<?php 
-			$taxonomy = 'paypal_ipn_type';
-			$term = isset($wp_query->query['paypal_ipn_type']) ? $wp_query->query['paypal_ipn_type'] :'';
-			$business_taxonomy = get_taxonomy($taxonomy);
-			wp_dropdown_categories(array(
-			'show_option_all' =>  __("Show all Payment Statuses", 'paypal-ipn'),
-			'taxonomy'        =>  $taxonomy,
-			'name'            =>  'paypal_ipn_type',
-			'orderby'         =>  'name',
-			'selected'        =>  $term,
-			'hierarchical'    =>  true,
-			'depth'           =>  3,
-			'show_count'      =>  true, // Show # listings in parens
-			'hide_empty'      =>  true,
-			));
-		
+            <?php
+            $taxonomy = 'paypal_ipn_type';
+            $term = isset($wp_query->query['paypal_ipn_type']) ? $wp_query->query['paypal_ipn_type'] : '';
+            $business_taxonomy = get_taxonomy($taxonomy);
+            wp_dropdown_categories(array(
+                'show_option_all' => __("Show all Payment Statuses", 'paypal-ipn'),
+                'taxonomy' => $taxonomy,
+                'name' => 'paypal_ipn_type',
+                'orderby' => 'name',
+                'selected' => $term,
+                'hierarchical' => true,
+                'depth' => 3,
+                'show_count' => true, // Show # listings in parens
+                'hide_empty' => true,
+            ));
         }
     }
 
@@ -511,31 +509,15 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
         $post_id = $post->ID;
 
         $postedtest = maybe_unserialize(get_post_meta($post_id, 'ipn data serialized', true));
-        $txn_type = get_post_meta($post_id, 'txn_type', true);
-        $transaction_type = get_post_meta($post_id, 'transaction_type', true);
-
-        if (isset($txn_type) && !empty($txn_type)) {
-            $txn_type_name = $txn_type;
-            $txn_type_name = strtolower(str_replace(' ', '_', $txn_type_name));
-            $hookname = "'paypal_ipn_for_wordpress_txn_type_$txn_type_name'";
-            $function_name_hook = "'process_$txn_type_name'";
-            $function_name = "process_" . $txn_type_name;
-        } elseif (isset($transaction_type) || $transaction_type == 'Adjustment' || $transaction_type = 'Adaptive Payment PAY' || $transaction_type = 'Adaptive Payment Pay') {
-            $txn_type_name = $transaction_type;
-            $txn_type_name = strtolower(str_replace(' ', '_', $txn_type_name));
-            $hookname = "'paypal_ipn_for_wordpress_adaptive_$txn_type_name'";
-            $function_name_hook = "'process_$txn_type_name'";
-            $function_name = "process_" . $txn_type_name;
-        }
+       
         ?>
         <div>
             <h3><?php _e('Extending PayPal IPN for WordPress', 'paypal-ipn'); ?></h3>
-            <p class="content_padding"><?php _e('PayPal IPN for WordPress provides a <a target="_blank" href="https://www.angelleye.com/paypal-ipn-for-wordpress-developer-guide/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link_ipn_details&utm_campaign=paypal_ipn_for_wordpress">wide variety of developer hooks</a> that you can use within your theme or plugins to trigger your own function(s).  There are hooks available based on the IPN type as well as the payment status of a transaction.', 'paypal-ipn'); ?></p>
+            <p class="content_padding"><?php _e('PayPal IPN for WordPress provides a <a target="_blank" href="https://www.angelleye.com/paypal-ipn-wordpress-hooks/?utm_source=paypal_ipn_for_wordpress&utm_medium=docs_link_ipn_details&utm_campaign=paypal_ipn_for_wordpress">wide variety of developer hooks</a> that you can use within your theme or plugins to trigger your own function(s).  There are hooks available based on the IPN type as well as the payment status of a transaction.', 'paypal-ipn'); ?></p>
             <p class="content_padding"><?php _e('The code snippet below is a template that you can use to quickly setup your own hook functions.  You can see that it prepares all of the possible data for the IPN in PHP variables for you for easy access to the values within your code.  Just set the "hook_name" to the hook you would like to use to trigger the function, and set the "function_name" to the name of the function you’re using in your theme/plugin.', 'paypal-ipn'); ?></p>
         </div>
         <?php
-
-        if (isset($txn_type_name) && !empty($txn_type_name)) :
+        
             $code_prettyprint_txn_type = '';
             echo '<pre class="prettyprint" id="prettyprint">';
             $posted = '$posted';
@@ -559,7 +541,6 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
             print_r($code_prettyprint_txn_type);
             echo '</pre>';
-        endif;
        
     }
 
@@ -585,20 +566,20 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Post_types {
 
         return $classes;
     }
-    
+
     /**
      * Potential SQL Injection Vulnerability
      * @since    1.0.6
      * @access   public
      */
     public static function paypal_ipn_for_wordpress_parse_query($query) {
-		global $pagenow;
-		$qv = &$query->query_vars;
-		if ($pagenow=='edit.php' && isset($qv['paypal_ipn_type']) && is_numeric($qv['paypal_ipn_type'])) {
-			$term = get_term_by('id',$qv['paypal_ipn_type'],'paypal_ipn_type');
-			$qv['paypal_ipn_type'] = ($term ? $term->slug : '');
-		}
-	}
+        global $pagenow;
+        $qv = &$query->query_vars;
+        if ($pagenow == 'edit.php' && isset($qv['paypal_ipn_type']) && is_numeric($qv['paypal_ipn_type'])) {
+            $term = get_term_by('id', $qv['paypal_ipn_type'], 'paypal_ipn_type');
+            $qv['paypal_ipn_type'] = ($term ? $term->slug : '');
+        }
+    }
 
 }
 
