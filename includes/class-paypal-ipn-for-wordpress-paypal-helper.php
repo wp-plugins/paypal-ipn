@@ -157,7 +157,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
         $ipn_response = !empty($_POST) ? $_POST : false;
 
         if ('yes' == $this->debug) {
-        	$this->log->add('paypal', 'Payment IPN Array: ' . print_r($ipn_response, true));
+            $this->log->add('paypal', 'Payment IPN Array: ' . print_r($ipn_response, true));
         }
         // If $_POST is empty return without process
         if ($ipn_response == false) {
@@ -336,7 +336,7 @@ class AngellEYE_Paypal_Ipn_For_Wordpress_Paypal_Helper {
              * $posted array contain all the response variable from received by PayPal IPN's
              */
 
-            if ($posted['transaction_type'] == 'Adjustment' || $posted['transaction_type'] = 'Adaptive Payment PAY' || $posted['transaction_type'] = 'Adaptive Payment Pay') {
+            if ( strtolower($posted['transaction_type']) == 'adaptive payment pay' || strtolower($posted['transaction_type']) == 'adaptive payment preapproval') {
                 do_action('paypal_ipn_for_wordpress_adaptive_' . strtolower(str_replace(' ', '_', $posted['transaction_type'])), $posted);
             }
         }
